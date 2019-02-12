@@ -16,6 +16,7 @@ export default class MyDocument extends Document {
         <Head>
           <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
           <link rel="stylesheet" href="static/css/materialize.min.css" />
+          <link rel="stylesheet" href="static/css/style.css" />
         </Head>
         <body className="custom_class">
           <Main />

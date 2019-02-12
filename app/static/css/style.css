@@ -1,0 +1,15 @@
+.btnMiddle {
+	margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 90%;
+    transform: translate(-50%, -50%);
+}
+
+.btnSpace {
+	margin-right: 10px;
+}
+
+.checkSpace {
+	margin-top: 10px;
+}
