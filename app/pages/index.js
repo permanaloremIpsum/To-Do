@@ -15,22 +15,52 @@ class Home extends React.Component{
             {check:false, text:'Cahyo'},
             ],
     temporary : [],
+    cekfilter : 'all',
+    filter : [],
     editable : false,
     editIndex : ''
+  }
+
+  filterData = () => {
+    const { cekfilter, filter, todo } = this.state
+    if(cekfilter==="all"){
+      this.setState({todo:filter})
+    }else if(cekfilter==="uncompleted"){
+      let uncompleted = filter.filter((data) => { 
+        if(data.check===false){
+          return {
+            check : data.check,
+            text: data.text
+          }
+        }
+      })
+      this.setState({todo:uncompleted})
+    }else if(cekfilter==="completed"){
+      let completed = filter.filter((data) => { 
+        if(data.check===true){
+          return {
+            check : data.check,
+            text: data.text
+          }
+        }
+      })
+      this.setState({todo:completed}) 
+    }
   }
 
   submit = (e) => {
     e.preventDefault()
     let input = e.target.todoinput.value
     if(input!==''){
-      const { todo } = this.state
-      todo.push({
+      const { todo, filter } = this.state
+      filter.push({
         check: false,
         text:e.target.todoinput.value
       });
-      this.setState({todo})
+      this.setState({filter, todo:filter})
       e.target.todoinput.value = ''
     }
+    this.filterData()
   }
 
   done = () => {
@@ -40,12 +70,11 @@ class Home extends React.Component{
   remove = (i) => {
     const { todo } = this.state
     todo.splice(i, 1);
-    this.setState({todo})
+    this.setState({todo, filter:todo})
   }
 
   edit = (i) => {
     const { editable, editIndex, todo } = this.state
-    // let temporary = Array.from(todo)
     let temporary = todo.map((data) => {
       return {
         check : data.check,
@@ -53,7 +82,6 @@ class Home extends React.Component{
       }
     })
     this.setState({temporary,editable:true, editIndex:i})
-    // console.log(temporary)
   }
 
   change = (e, i) => {
@@ -71,41 +99,13 @@ class Home extends React.Component{
       todo[i].check = true
     }
     this.setState({todo})
-    // console.log(!e.target.checked)
+    this.filterData()
   }
-  
-  // chek key apakah complete
-  // kalau iya maka lakukan perulangan
-  // return data yang cek true
-  // kemudian di setState ke todo
-  groupFunction = (cek) => {
-    const { todo } = this.state
-    if(cek==="all"){
-      this.setState({todo})
-      console.log(todo)
-    }else if(cek==="uncompleted"){
-      let uncompleted = todo.filter((data) => { 
-        if(data.check===false){
-          return {
-          check : data.check,
-          text: data.text
-          }
-        }
-      })
-      console.log(uncompleted)
-      // this.setState({todo:uncompleted})
-    }else if(cek==="completed"){
-      let completed = todo.filter((data) => { 
-        if(data.check===true){
-          return {
-          check : data.check,
-          text: data.text
-          }
-        }
-      })
-      console.log(completed)
-      // this.setState({todo:completed})
-    }
+
+  groupFunction = async (cek) => {
+    const { cekfilter } = this.state
+    await this.setState({cekfilter:cek})
+    this.filterData()
   }
 
   keydownFunction = (event) => {
@@ -120,6 +120,15 @@ class Home extends React.Component{
   }
   componentDidMount(){
     document.addEventListener("keydown", this.keydownFunction, false);
+    const { todo } = this.state
+    let filter = todo.map((data) => {
+      return {
+        check : data.check,
+        text: data.text
+      }
+    })
+    this.setState({filter})
+    // this.filterData()
   }
   componentWillUnmount(){
     document.removeEventListener("keydown", this.keydownFunction, false);

@@ -13,3 +13,11 @@
 .checkSpace {
 	margin-top: 10px;
 }
+
+input.validate.col.s10 {
+	padding-left: 15px;
+}
+
+.card .card-content .card-title {
+	margin-bottom: 20px;
+}
