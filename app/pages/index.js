@@ -22,7 +22,7 @@ class Home extends React.Component{
   }
 
   filterData = () => {
-    const { cekfilter, filter, todo } = this.state
+    const { cekfilter, filter, todo,  } = this.state
     if(cekfilter==="all"){
       this.setState({todo:filter})
     }else if(cekfilter==="uncompleted"){
@@ -85,9 +85,9 @@ class Home extends React.Component{
   }
 
   change = (e, i) => {
-    const { todo, temporary, check } = this.state
+    const { todo, temporary, check, filter } = this.state
     todo[i].text = e.target.value
-    this.setState({todo}) 
+    this.setState({todo})
   }
 
   completedCheck = (e, i) => {
@@ -108,17 +108,23 @@ class Home extends React.Component{
     this.filterData()
   }
 
+  isActive = (val) => {
+    const { cekfilter } = this.state
+    let active = (val===cekfilter) ? 'active' : ''
+    return active + ' waves-effect waves-light btn grey btnSpace';
+  }
+
   keydownFunction = (event) => {
-    const {editable, todo, temporary} = this.state
+    const {editable, todo, temporary, filter} = this.state
     if(editable){
       if(event.keyCode === 13) {
         this.setState({todo,editable:false})
       }else if(event.keyCode === 27) {
-        this.setState({todo:temporary,editable:false})
+        this.setState({todo:temporary,filter:temporary,editable:false})
       }
     }    
   }
-  componentDidMount(){
+  componentDidMount = async () => {
     document.addEventListener("keydown", this.keydownFunction, false);
     const { todo } = this.state
     let filter = todo.map((data) => {
@@ -127,8 +133,8 @@ class Home extends React.Component{
         text: data.text
       }
     })
-    this.setState({filter})
-    // this.filterData()
+    await this.setState({filter})
+    this.filterData()
   }
   componentWillUnmount(){
     document.removeEventListener("keydown", this.keydownFunction, false);
@@ -179,9 +185,9 @@ class Home extends React.Component{
                   </div>
                 </form>
                 <div>
-                  <button className="waves-effect waves-light btn grey btnSpace" href="#" onClick={()=>this.groupFunction('all')}>All</button>
-                  <button className="waves-effect waves-light btn grey btnSpace" href="#" onClick={()=>this.groupFunction('uncompleted')}>Uncompleted</button>
-                  <button className="waves-effect waves-light btn grey btnSpace" href="#" onClick={()=>this.groupFunction('completed')}>Completed</button>
+                  <button className={this.isActive('all')} href="#" onClick={()=>this.groupFunction('all')}>All</button>
+                  <button className={this.isActive('uncompleted')} href="#" onClick={()=>this.groupFunction('uncompleted')}>Uncompleted</button>
+                  <button className={this.isActive('completed')} href="#" onClick={()=>this.groupFunction('completed')}>Completed</button>
                 </div>
               </div>
             </div>

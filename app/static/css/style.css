@@ -21,3 +21,7 @@ input.validate.col.s10 {
 .card .card-content .card-title {
 	margin-bottom: 20px;
 }
+
+button.active {
+	background-color: #60b3cc !important;
+}
