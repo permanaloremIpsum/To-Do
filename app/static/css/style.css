@@ -18,10 +18,32 @@ input.validate.col.s10 {
 	padding-left: 15px;
 }
 
+.card .card-content {
+	margin-top: 30px;
+}
+
 .card .card-content .card-title {
 	margin-bottom: 20px;
 }
 
 button.active {
 	background-color: #60b3cc !important;
+}
+
+.search-wrapper{
+	color: #777;
+    margin-top: -1px;
+    transition: margin .25s ease;
+}
+
+.search-wrapper input.input-search{
+	width: 40%;
+    float: right;
+}
+
+.search-wrapper i.material-icons {
+	position: absolute;
+    top: 65px;
+    right: 30px;
+    cursor: pointer;
 }

@@ -12,6 +12,7 @@ class Home extends React.Component{
     todo : [
             {check:true, text:'Alvin'},
             {check:false, text:'Bambang'},
+            {check:false, text:'Vale'},
             {check:false, text:'Cahyo'},
             ],
     temporary : [],
@@ -28,20 +29,14 @@ class Home extends React.Component{
     }else if(cekfilter==="uncompleted"){
       let uncompleted = filter.filter((data) => { 
         if(data.check===false){
-          return {
-            check : data.check,
-            text: data.text
-          }
+          return data
         }
       })
       this.setState({todo:uncompleted})
     }else if(cekfilter==="completed"){
       let completed = filter.filter((data) => { 
         if(data.check===true){
-          return {
-            check : data.check,
-            text: data.text
-          }
+          return data
         }
       })
       this.setState({todo:completed}) 
@@ -76,10 +71,7 @@ class Home extends React.Component{
   edit = (i) => {
     const { editable, editIndex, todo } = this.state
     let temporary = todo.map((data) => {
-      return {
-        check : data.check,
-        text: data.text
-      }
+      return data
     })
     this.setState({temporary,editable:true, editIndex:i})
   }
@@ -111,7 +103,7 @@ class Home extends React.Component{
   isActive = (val) => {
     const { cekfilter } = this.state
     let active = (val===cekfilter) ? 'active' : ''
-    return active + ' waves-effect waves-light btn grey btnSpace';
+    return active + ' waves-effect waves-light btn grey btnSpace'
   }
 
   keydownFunction = (event) => {
@@ -124,14 +116,27 @@ class Home extends React.Component{
       }
     }    
   }
+
+  search = (e) => {
+    const { todo, filter } = this.state
+    let newList = filter.filter((data) =>{
+      const lc = {
+        check : data.check,
+        text : data.text.toLowerCase()
+      }
+      const search = e.target.value.toLowerCase()
+      return lc.text.includes(search)
+    })
+    this.setState({todo:newList,filter:newList})
+    console.log(newList)
+  }
+
   componentDidMount = async () => {
+    document.title = "To-Do"
     document.addEventListener("keydown", this.keydownFunction, false);
     const { todo } = this.state
     let filter = todo.map((data) => {
-      return {
-        check : data.check,
-        text: data.text
-      }
+      return data
     })
     await this.setState({filter})
     this.filterData()
@@ -147,8 +152,14 @@ class Home extends React.Component{
         <div className="row">
           <div className="col s6 offset-s3">
             <div className="card">
-              <div className="card-content">
+              <div className="card-action">
                 <span className="card-title">To-Do</span>
+                  <div className="search-wrapper">
+                    <input className="input-search" type="text" name="search" placeholder="Search" onChange={(e)=>{return this.search(e)}}/>
+                    <i className="material-icons">search</i>
+                  </div>
+              </div>
+              <div className="card-content">
                 {
                   todo.length ? todo.map((data, i) => (
                     <ul key={i} className="collection">
